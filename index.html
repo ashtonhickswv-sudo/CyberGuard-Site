@@ -1,1 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CyberGuard — Cybersecurity Education</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  /* ── Tokens ── */
+  :root {
+    --navy:      #0A1628;
+    --navy-mid:  #0F2044;
+    --navy-card: #132952;
+    --blue:      #2563EB;
+    --blue-light:#3B82F6;
+    --blue-glow: rgba(37,99,235,0.18);
+    --white:     #F0F4FF;
+    --muted:     #8BA3C7;
+    --border:    rgba(59,130,246,0.18);
+    --mono:      'JetBrains Mono', monospace;
+    --head:      'Space Grotesk', sans-serif;
+    --body:      'Inter', sans-serif;
+  }
 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── Threat Ticker ── */
+  .ticker {
+    background: var(--blue);
+    padding: 8px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+  .ticker-inner {
+    display: inline-block;
+    animation: ticker 40s linear infinite;
+  }
+  .ticker-inner span { margin: 0 48px; opacity: 0.9; }
+  .ticker-inner span::before { content: "▸  "; }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,22,40,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    font-family: var(--head);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: var(--blue);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--blue);
+    color: #fff !important;
+    padding: 8px 18px;
+    border-radius: 6px;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--blue-light) !important; color: #fff !important; }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 88vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 5vw;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 0%, rgba(37,99,235,0.22) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 80% 80%, rgba(37,99,235,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 70%);
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .hero-content { position: relative; max-width: 760px; }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--blue-light);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 100px;
+    background: var(--blue-glow);
+  }
+  .hero-eyebrow::before { content: ''; width: 6px; height: 6px; background: var(--blue-light); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  h1 {
+    font-family: var(--head);
+    font-size: clamp(36px, 6vw, 68px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: var(--white);
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--blue-light);
+  }
+  .hero-sub {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+  .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: var(--head);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+  }
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn-primary:hover { background: var(--blue-light); transform: translateY(-1px); }
+  .btn-outline { background: transparent; color: var(--white); border: 1px solid var(--border); }
+  .btn-outline:hover { border-color: var(--blue-light); color: var(--blue-light); }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    margin-top: 64px;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--head);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .stat-num span { color: var(--blue-light); }
+  .stat-label { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 4px; }
+
+  /* ── Section base ── */
+  section { padding: 96px 5vw; }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--blue-light);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  h2 {
+    font-family: var(--head);
+    font-size: clamp(26px, 4vw, 42px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 560px;
+    margin-bottom: 56px;
+    line-height: 1.7;
+  }
+
+  /* ── Threats section ── */
+  .threats { background: var(--navy-mid); }
+  .threat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .threat-card {
+    background: var(--navy-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .threat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--blue);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .threat-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+  .threat-card:hover::before { transform: scaleX(1); }
+  .threat-icon { font-size: 32px; margin-bottom: 20px; }
+  .threat-card h3 {
+    font-family: var(--head);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .threat-card p { color: var(--muted); font-size: 14px; line-height: 1.7; }
+  .severity {
+    display: inline-block;
+    margin-top: 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+  .sev-critical { background: rgba(239,68,68,0.15); color: #F87171; border: 1px solid rgba(239,68,68,0.3); }
+  .sev-high     { background: rgba(245,158,11,0.15); color: #FCD34D; border: 1px solid rgba(245,158,11,0.3); }
+  .sev-medium   { background: rgba(59,130,246,0.15); color: #93C5FD; border: 1px solid rgba(59,130,246,0.3); }
+
+  /* ── Best practices ── */
+  .practices-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  @media (max-width: 768px) { .practices-wrap { grid-template-columns: 1fr; } }
+  .practice-list { display: flex; flex-direction: column; gap: 16px; }
+  .practice-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--navy-mid);
+    transition: border-color 0.2s;
+  }
+  .practice-item:hover { border-color: var(--blue); }
+  .practice-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--blue-light);
+    background: var(--blue-glow);
+    border: 1px solid var(--border);
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .practice-item h4 { font-family: var(--head); font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .practice-item p  { color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+  /* Terminal block */
+  .terminal {
+    background: #060E1C;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+  .terminal-bar {
+    background: var(--navy-card);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #FF5F57; }
+  .dot-y { background: #FEBC2E; }
+  .dot-g { background: #28C840; }
+  .terminal-title { color: var(--muted); font-size: 12px; margin-left: 8px; }
+  .terminal-body { padding: 24px; line-height: 2; }
+  .t-prompt { color: var(--blue-light); }
+  .t-cmd    { color: var(--white); }
+  .t-out    { color: #4ADE80; }
+  .t-warn   { color: #FCD34D; }
+  .t-muted  { color: var(--muted); }
+  .cursor   { display: inline-block; width: 8px; height: 14px; background: var(--blue-light); animation: blink 1.2s step-end infinite; vertical-align: middle; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* ── Tools section ── */
+  .tools { background: var(--navy-mid); }
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  .tool-card {
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .tool-card:hover { border-color: var(--blue-light); transform: translateY(-2px); }
+  .tool-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--blue-light);
+    background: var(--blue-glow);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    display: inline-block;
+    letter-spacing: 0.08em;
+  }
+  .tool-card h4 { font-family: var(--head); font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .tool-card p  { color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+  /* ── Resources ── */
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+  }
+  .resource-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    background: var(--navy-mid);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: border-color 0.2s;
+  }
+  .resource-card:hover { border-color: var(--blue); }
+  .resource-type {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .resource-card h4 { font-family: var(--head); font-size: 17px; font-weight: 600; }
+  .resource-card p  { color: var(--muted); font-size: 14px; line-height: 1.6; flex: 1; }
+  .resource-link {
+    color: var(--blue-light);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap 0.2s;
+  }
+  .resource-link:hover { gap: 10px; }
+
+  /* ── Newsletter ── */
+  .newsletter {
+    background: linear-gradient(135deg, var(--navy-card) 0%, var(--navy-mid) 100%);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+  .newsletter-inner { max-width: 520px; margin: 0 auto; }
+  .newsletter h2 { margin-bottom: 12px; }
+  .newsletter p { color: var(--muted); margin-bottom: 32px; }
+  .email-form { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .email-input {
+    flex: 1;
+    min-width: 240px;
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 13px 18px;
+    color: var(--white);
+    font-family: var(--body);
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .email-input::placeholder { color: var(--muted); }
+  .email-input:focus { border-color: var(--blue); }
+
+  /* ── Footer ── */
+  footer {
+    padding: 48px 5vw;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: gap;
+    gap: 24px;
+  }
+  .footer-left { display: flex; flex-direction: column; gap: 8px; }
+  .footer-copy { color: var(--muted); font-size: 13px; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+
+  /* ── Scroll reveal ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .hero-stats { gap: 28px; }
+    footer { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Threat Ticker -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span>Cyberattack every 39 seconds on average</span>
+    <span>3.5 million unfilled cybersecurity jobs globally</span>
+    <span>Phishing accounts for 36% of data breaches</span>
+    <span>Average cost of a data breach: $4.45 million</span>
+    <span>95% of breaches are caused by human error</span>
+    <span>Ransomware attacks up 13% year-over-year</span>
+    <span>Zero-day exploits sold for up to $2.5 million</span>
+    <span>Cyberattack every 39 seconds on average</span>
+    <span>3.5 million unfilled cybersecurity jobs globally</span>
+    <span>Phishing accounts for 36% of data breaches</span>
+    <span>Average cost of a data breach: $4.45 million</span>
+    <span>95% of breaches are caused by human error</span>
+    <span>Ransomware attacks up 13% year-over-year</span>
+    <span>Zero-day exploits sold for up to $2.5 million</span>
+  </div>
+</div>
+
+<!-- Nav -->
+<nav>
+  <a class="logo" href="#">
+    <div class="logo-icon">🛡</div>
+    CyberGuard
+  </a>
+  <ul class="nav-links">
+    <li><a href="#threats">Threats</a></li>
+    <li><a href="#practices">Best Practices</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#resources">Resources</a></li>
+    <li><a href="#newsletter" class="nav-cta">Stay Updated</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Cybersecurity Education Hub</div>
+    <h1>Know the Threats.<br><em>Own Your Defense.</em></h1>
+    <p class="hero-sub">
+      Clear, practical cybersecurity knowledge for individuals, students, and professionals.
+      Understand how attacks work — and how to stop them.
+    </p>
+    <div class="hero-actions">
+      <a href="#threats" class="btn btn-primary">Explore Threats</a>
+      <a href="#resources" class="btn btn-outline">Free Resources</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">39<span>s</span></div>
+        <div class="stat-label">Between attacks</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">$4.45<span>M</span></div>
+        <div class="stat-label">Avg breach cost</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">95<span>%</span></div>
+        <div class="stat-label">Human-caused</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Common Threats -->
+<section class="threats" id="threats">
+  <div class="section-label">// threat landscape</div>
+  <h2>Common Cyber Threats</h2>
+  <p class="section-sub">Understanding attack types is the first step in defending against them.</p>
+  <div class="threat-grid reveal">
+    <div class="threat-card">
+      <div class="threat-icon">🎣</div>
+      <h3>Phishing</h3>
+      <p>Deceptive emails, messages, or sites that trick users into revealing credentials or downloading malware. The #1 attack vector for data breaches worldwide.</p>
+      <span class="severity sev-critical">CRITICAL</span>
+    </div>
+    <div class="threat-card">
+      <div class="threat-icon">🔒</div>
+      <h3>Ransomware</h3>
+      <p>Malware that encrypts your files and demands payment for decryption. Attacks have surged 13% year-over-year, targeting hospitals, schools, and businesses.</p>
+      <span class="severity sev-critical">CRITICAL</span>
+    </div>
+    <div class="threat-card">
+      <div class="threat-icon">🕵️</div>
+      <h3>Social Engineering</h3>
+      <p>Manipulating people psychologically to divulge confidential information. Bypasses technical defenses entirely by targeting the human layer.</p>
+      <span class="severity sev-high">HIGH</span>
+    </div>
+    <div class="threat-card">
+      <div class="threat-icon">💉</div>
+      <h3>SQL Injection</h3>
+      <p>Inserting malicious SQL code into input fields to manipulate or extract database contents. One of the oldest and most prevalent web vulnerabilities.</p>
+      <span class="severity sev-high">HIGH</span>
+    </div>
+    <div class="threat-card">
+      <div class="threat-icon">🌊</div>
+      <h3>DDoS Attacks</h3>
+      <p>Flooding a server with traffic from thousands of sources to knock it offline. Can take down websites, APIs, and entire infrastructures within minutes.</p>
+      <span class="severity sev-high">HIGH</span>
+    </div>
+    <div class="threat-card">
+      <div class="threat-icon">👤</div>
+      <h3>Man-in-the-Middle</h3>
+      <p>Secretly intercepting and potentially altering communications between two parties. Common on unsecured Wi-Fi networks and unencrypted connections.</p>
+      <span class="severity sev-medium">MEDIUM</span>
+    </div>
+  </div>
+</section>
+
+<!-- Best Practices -->
+<section id="practices">
+  <div class="section-label">// defense fundamentals</div>
+  <h2>Security Best Practices</h2>
+  <p class="section-sub">Foundational habits that dramatically reduce your attack surface.</p>
+  <div class="practices-wrap">
+    <div class="practice-list reveal">
+      <div class="practice-item">
+        <div class="practice-num">01</div>
+        <div>
+          <h4>Use Strong, Unique Passwords</h4>
+          <p>Each account should have a unique password of 16+ characters. Use a password manager to generate and store them securely.</p>
+        </div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-num">02</div>
+        <div>
+          <h4>Enable Multi-Factor Authentication</h4>
+          <p>MFA stops 99.9% of automated credential attacks. Enable it on every account that supports it, prioritising email and banking.</p>
+        </div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-num">03</div>
+        <div>
+          <h4>Keep Software Updated</h4>
+          <p>Unpatched software is the #1 exploit vector. Enable automatic updates for your OS, browser, and applications.</p>
+        </div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-num">04</div>
+        <div>
+          <h4>Verify Before You Click</h4>
+          <p>Hover over links to inspect the real URL. Verify sender addresses. When in doubt, go directly to the official website.</p>
+        </div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-num">05</div>
+        <div>
+          <h4>Back Up Your Data</h4>
+          <p>Follow the 3-2-1 rule: 3 copies, on 2 different media, with 1 stored offsite or in the cloud. Your best ransomware defense.</p>
+        </div>
+      </div>
+    </div>
+    <div class="terminal reveal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <span class="terminal-title">security_check.sh</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="t-prompt">user@cyberguard:~$ </span><span class="t-cmd">./security_check.sh</span></div>
+        <div><span class="t-muted"># Running security audit...</span></div>
+        <br>
+        <div><span class="t-out">✔ MFA enabled on all accounts</span></div>
+        <div><span class="t-out">✔ Password manager active</span></div>
+        <div><span class="t-out">✔ OS fully patched (June 2026)</span></div>
+        <div><span class="t-out">✔ Firewall: active</span></div>
+        <div><span class="t-warn">⚠ Backup: last run 8 days ago</span></div>
+        <div><span class="t-out">✔ Antivirus: up to date</span></div>
+        <div><span class="t-out">✔ VPN: connected</span></div>
+        <br>
+        <div><span class="t-muted"># Score: </span><span class="t-out">6/7 — Good</span></div>
+        <div><span class="t-muted"># Recommendation: </span><span class="t-warn">run backup</span></div>
+        <br>
+        <div><span class="t-prompt">user@cyberguard:~$ </span><span class="cursor"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tools -->
+<section class="tools" id="tools">
+  <div class="section-label">// essential toolkit</div>
+  <h2>Security Tools to Know</h2>
+  <p class="section-sub">Industry-standard tools used by security professionals and ethical hackers.</p>
+  <div class="tools-grid reveal">
+    <div class="tool-card">
+      <div class="tool-tag">NETWORK</div>
+      <h4>Nmap</h4>
+      <p>The gold standard for network discovery and port scanning. Maps open ports and services across hosts.</p>
+    </div>
+    <div class="tool-card">
+      <div class="tool-tag">ANALYSIS</div>
+      <h4>Wireshark</h4>
+      <p>Captures and analyses live network traffic. Essential for spotting anomalies and debugging protocols.</p>
+    </div>
+    <div class="tool-card">
+      <div class="tool-tag">PENTESTING</div>
+      <h4>Metasploit</h4>
+      <p>Framework for developing and executing exploits. Used by pen testers to validate vulnerabilities legally.</p>
+    </div>
+    <div class="tool-card">
+      <div class="tool-tag">WEB</div>
+      <h4>Burp Suite</h4>
+      <p>Intercepts and modifies HTTP/S traffic. Industry-standard for web application security testing.</p>
+    </div>
+    <div class="tool-card">
+      <div class="tool-tag">PASSWORD</div>
+      <h4>Hashcat</h4>
+      <p>World's fastest password recovery tool. Used to audit password strength via GPU-accelerated cracking.</p>
+    </div>
+    <div class="tool-card">
+      <div class="tool-tag">DISTRO</div>
+      <h4>Kali Linux</h4>
+      <p>The go-to OS for penetration testing, pre-loaded with 600+ security and forensics tools.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Resources -->
+<section id="resources">
+  <div class="section-label">// learning resources</div>
+  <h2>Start Learning Today</h2>
+  <p class="section-sub">Free and paid resources to build real cybersecurity skills from scratch.</p>
+  <div class="resources-grid reveal">
+    <div class="resource-card">
+      <div class="resource-type">Platform</div>
+      <h4>TryHackMe</h4>
+      <p>Browser-based labs with guided learning paths. Perfect for beginners — no setup required.</p>
+      <a class="resource-link" href="https://tryhackme.com" target="_blank">Visit TryHackMe →</a>
+    </div>
+    <div class="resource-card">
+      <div class="resource-type">Platform</div>
+      <h4>Hack The Box</h4>
+      <p>Real-world machines to compromise legally. Respected across the security industry for its challenge quality.</p>
+      <a class="resource-link" href="https://hackthebox.com" target="_blank">Visit Hack The Box →</a>
+    </div>
+    <div class="resource-card">
+      <div class="resource-type">Certification</div>
+      <h4>CompTIA Security+</h4>
+      <p>The most widely held entry-level security certification. A recognized baseline for security roles globally.</p>
+      <a class="resource-link" href="https://comptia.org" target="_blank">Learn More →</a>
+    </div>
+    <div class="resource-card">
+      <div class="resource-type">Free Course</div>
+      <h4>Cybrary</h4>
+      <p>Free cybersecurity courses covering everything from networking fundamentals to advanced penetration testing.</p>
+      <a class="resource-link" href="https://cybrary.it" target="_blank">Browse Courses →</a>
+    </div>
+    <div class="resource-card">
+      <div class="resource-type">Practice</div>
+      <h4>OWASP WebGoat</h4>
+      <p>A deliberately insecure web app for learning the OWASP Top 10 vulnerabilities hands-on in a safe environment.</p>
+      <a class="resource-link" href="https://owasp.org/www-project-webgoat" target="_blank">Get WebGoat →</a>
+    </div>
+    <div class="resource-card">
+      <div class="resource-type">News</div>
+      <h4>Krebs on Security</h4>
+      <p>Brian Krebs' investigative reporting on cybercrime. Essential reading to stay current on real-world threats.</p>
+      <a class="resource-link" href="https://krebsonsecurity.com" target="_blank">Read the Blog →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter" id="newsletter">
+  <div class="newsletter-inner">
+    <div class="section-label" style="text-align:center">// stay current</div>
+    <h2>Threat Intelligence, Weekly</h2>
+    <p>Get the latest vulnerabilities, tools, and security news delivered to your inbox. No spam — unsubscribe anytime.</p>
+    <div class="email-form">
+      <input class="email-input" type="email" placeholder="your@email.com" />
+      <button class="btn btn-primary" onclick="handleSubscribe()">Subscribe</button>
+    </div>
+    <p id="sub-msg" style="margin-top:16px;font-size:13px;color:#4ADE80;display:none;">✔ You're on the list. Stay safe out there.</p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-left">
+    <a class="logo" href="#" style="font-size:17px;">
+      <div class="logo-icon" style="width:26px;height:26px;font-size:13px;">🛡</div>
+      CyberGuard
+    </a>
+    <p class="footer-copy">© 2026 CyberGuard · Built by Ashton Hicks · For educational purposes only</p>
+  </div>
+  <div class="footer-links">
+    <a href="#threats">Threats</a>
+    <a href="#practices">Best Practices</a>
+    <a href="#tools">Tools</a>
+    <a href="#resources">Resources</a>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Subscribe
+  function handleSubscribe() {
+    const input = document.querySelector('.email-input');
+    const msg   = document.getElementById('sub-msg');
+    if (input.value && input.value.includes('@')) {
+      input.style.display = 'none';
+      document.querySelector('.email-form .btn').style.display = 'none';
+      msg.style.display = 'block';
+    } else {
+      input.style.borderColor = '#F87171';
+      setTimeout(() => input.style.borderColor = '', 1000);
+    }
+  }
+</script>
+</body>
+</html>
